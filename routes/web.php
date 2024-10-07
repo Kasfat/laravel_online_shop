@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\admin\ProductImageController;
+use App\Http\Controllers\FrontController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -24,12 +25,9 @@ use Illuminate\Support\Str;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/',[FrontController::class, 'index'])->name('front.home');
 
 Route::get('/admin/login', [AdminLoginController::class, 'index'])->name('admin.login');
-
 
 Route::group(['prefix' => 'admin'], function () {
 
