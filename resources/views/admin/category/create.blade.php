@@ -2,7 +2,7 @@
 
 @section('content')
 	<!-- Content Header (Page header) -->
-    <section class="content-header">					
+    <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
@@ -21,20 +21,20 @@
         <div class="container-fluid">
             <form action="" method="post" id="categoryForm" name="categoryForm">
                 <div class="card">
-                    <div class="card-body">								
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="name">Name</label>
                                     <input type="text" name="name" id="name" class="form-control" placeholder="Name">
-                                    <p></p>	
+                                    <p></p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="slug">Slug</label>
                                     <input type="text" readonly name="slug" id="slug" class="form-control" placeholder="Slug">
-                                    <p></p>	
+                                    <p></p>
                                 </div>
                             </div>
                             <div class=" col-md-6">
@@ -42,8 +42,8 @@
                                     <input type="hidden" name="image_id" id="image_id" value=""/>
                                     <label for="image" >Image</label>
                                     <div id="image" class="dropzone dz-clickable">
-                                        <div class="dz-message needsclick">    
-                                            <br>Drop files here or click to upload.<br><br>                                            
+                                        <div class="dz-message needsclick">
+                                            <br>Drop files here or click to upload.<br><br>
                                         </div>
                                     </div>
                                 </div>
@@ -56,9 +56,18 @@
                                     <option value="0">Block</option>
                                    </select>
                                 </div>
-                            </div>											
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="status">Show on Home</label>
+                                    <select name="showHome" id="showHome" class="form-control">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    </div>							
+                    </div>
                 </div>
                 <div class="pb-5 pt-3">
                     <button type="submit" class="btn btn-primary">Create</button>
@@ -92,7 +101,7 @@
                             .siblings('p')
                             .removeClass('invalid-feedback')
                             .html('')
-                        window.location.href="{{ route('categories.index') }}";    
+                        window.location.href="{{ route('categories.index') }}";
                     }else{
                         var errors = response.errors;
                         if (errors.name) {
@@ -139,13 +148,13 @@
                 if(response.status == true){
                     $('#slug').val(response.slug);
                 }
-            } 
+            }
         });
         });
 
 
-    Dropzone.autoDiscover = false;    
-        const dropzone = $("#image").dropzone({ 
+    Dropzone.autoDiscover = false;
+        const dropzone = $("#image").dropzone({
     init: function() {
         this.on('addedfile', function(file) {
             if (this.files.length > 1) {
@@ -155,16 +164,23 @@
     },
     url:  "{{ route('temp-images.create') }}",
     maxFiles: 1,
-    paramName: 'image',
+    paramName: 'image[]', // This allows multiple image uploads as an array
     addRemoveLinks: true,
     acceptedFiles: "image/jpeg,image/png,image/gif",
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }, success: function(file, response){
-        $("#image_id").val(response.image_id);
+                if (Array.isArray(response)) {
+                    response.forEach(function(response) {
+                        if (response.status) {
+                            $("#image_id").val(response.image_id); // Set image_id from the response
+                        }
+                    });
+                }
+        //$("#image_id").val(response.image_id);
         //console.log(response)
     }
 });
-      
+
     </script>
 @endsection

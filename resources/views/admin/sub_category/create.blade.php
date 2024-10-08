@@ -47,7 +47,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="slug">Slug</label>
-                                <input type="text" readonly name="slug" id="slug" class="form-control" placeholder="Slug">
+                                <input type="text" name="slug" id="slug" class="form-control" placeholder="Slug">
                                 <p></p>
                             </div>
                         </div>
@@ -57,6 +57,15 @@
                                 <select name="status" id="status" class="form-control">
                                     <option value="1">Active</option>
                                     <option value="0">Block</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="status">Show on Home</label>
+                                <select name="showHome" id="showHome" class="form-control">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
                                 </select>
                             </div>
                         </div>
