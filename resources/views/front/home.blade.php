@@ -143,7 +143,7 @@
                                         @if(!empty($productImage->image))
                                             <img class="card-img-top" src="{{asset('uploads/product/small/'.$productImage->image)}}"  />
                                         @else
-                                            <img src="{{asset('admin-assets/img/default-150x150.png')}}"/>
+                                            <img class="card-img-top" src="{{asset('admin-assets/img/default-150x150.png')}}"/>
                                         @endif
                                     </a>
                                     <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
