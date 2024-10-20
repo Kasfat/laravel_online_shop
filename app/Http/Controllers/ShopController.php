@@ -60,7 +60,7 @@ class ShopController extends Controller
         }else{
             $products = $products->orderBy('id','DESC');
         }
-        $products = $products->get();
+        $products = $products->paginate(6);
 
         return view('front.shop',['categories'=>$categories,
             'brands'=>$brands,
