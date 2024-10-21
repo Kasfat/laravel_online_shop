@@ -68,6 +68,9 @@ class ProductController extends Controller
             $product->sub_category_id = $request->sub_category;
             $product->brand_id = $request->brand;
             $product->is_featured = $request->is_featured;
+            $product->shipping_returns = $request->shipping_returns;
+            $product->short_description = $request->short_description;
+            $product->related_products = (!empty($request->related_products))? implode(',',$request->related_products) : '';
             $product->save();
 
             //save Gallery images
@@ -130,10 +133,17 @@ class ProductController extends Controller
         //fetch Product image
         $productImages = ProductImage::where('product_id',$product->id)->get();
 
+        // Fetch related product
+        $relatedProducts = [];
+        if($product->related_products !=''){
+            $productArray = explode(',',$product->related_products);
+            $relatedProducts = Product::whereIn('id',$productArray)->get();
+        }
+
         $subCategories = SubCategory::where('category_id', $product->category_id)->get();
         $categories = Category::orderBy('name','ASC')->get();
         $brands = Brand::orderBy('name','ASC')->get();
-        return view('admin.products.edit',['categories'=>$categories, 'brands'=>$brands, 'product'=>$product, 'subCategories'=>$subCategories, 'productImages'=>$productImages]);
+        return view('admin.products.edit',['categories'=>$categories, 'brands'=>$brands, 'product'=>$product, 'subCategories'=>$subCategories, 'productImages'=>$productImages, 'relatedProducts'=>$relatedProducts]);
     }
 
     public function update(Request $request, $id)
@@ -170,6 +180,9 @@ class ProductController extends Controller
             $product->sub_category_id = $request->sub_category;
             $product->brand_id = $request->brand;
             $product->is_featured = $request->is_featured;
+            $product->shipping_returns = $request->shipping_returns;
+            $product->short_description = $request->short_description;
+            $product->related_products = (!empty($request->related_products))? implode(',',$request->related_products) : '';
             $product->save();
 
             //save Gallery images
@@ -214,6 +227,22 @@ class ProductController extends Controller
         session()->flash('success', 'Product deleted successfully.');
         return response()->json([
             'status' => true,
+        ]);
+    }
+
+    public function getProducts(Request $request){
+        $tempProduct = [];
+        if($request->term !=""){
+            $products = Product::where('title','like','%'.$request->term.'%')->get();
+            if($products !=null){
+                foreach ($products as $product){
+                    $tempProduct[] = array('id'=>$product->id, 'text'=>$product->title);
+                }
+            }
+        }
+        return response()->json([
+            'tags'=>$tempProduct,
+            'status'=>true
         ]);
     }
 }

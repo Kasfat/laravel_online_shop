@@ -28,6 +28,7 @@ use Illuminate\Support\Str;
 
 Route::get('/',[FrontController::class, 'index'])->name('front.home');
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}',[ShopController::class, 'index'])->name('front.shop');
+Route::get('/product/{slug}',[ShopController::class,'product'])->name('front.product');
 
 Route::get('/admin/login', [AdminLoginController::class, 'index'])->name('admin.login');
 
@@ -76,6 +77,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
         Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/delete-product', [ProductController::class, 'destroy'])->name('product.destroy');
+        Route::get('/get-products', [ProductController::class, 'getProducts'])->name('products.getProducts');
 
 
         Route::get('/product-subcategories', [ProductSubCategoryController::class, 'index'])->name('product-subcategories.index');

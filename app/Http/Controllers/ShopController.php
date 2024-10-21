@@ -15,8 +15,6 @@ class ShopController extends Controller
         $subCategorySelected = '';
         $brandsArray = [];
 
-
-
         $categories = Category::orderBy('name','ASC')->with('sub_category')->where('status',1)->get();
         $brands = Brand::orderBy('name','ASC')->where('status',1)->get();
 
@@ -73,4 +71,22 @@ class ShopController extends Controller
             'sort' => $request->get('sort'),
         ]);
     }
+
+    public function product($slug){
+
+        $product = Product::where('slug',$slug)->with('product_images')->first();
+        if($product == null){
+            abort(404);
+        }
+
+        // Fetch related product
+        $relatedProducts = [];
+        if($product->related_products !=''){
+            $productArray = explode(',',$product->related_products);
+            $relatedProducts = Product::whereIn('id',$productArray)->with('product_images')->get();
+        }
+
+        return view('front.product',['product'=>$product, 'relatedProducts'=>$relatedProducts]);
+    }
+
 }
